@@ -11,10 +11,14 @@ from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 import requests
 
-# Set global variable parameters. 
+# Set API parameters. 
 load_dotenv()
-# YOUTUBE_LINK = os.getenv('YOUTUBE_LINK')
-YOUTUBE_LINK = 'https://www.youtube.com/gaming/games'
+# URL = os.getenv('YOUTUBE_LINK')
+URL = 'https://www.youtube.com/gaming/games'
 EMAIL = os.getenv('EMAIL')
-WEBSITE_TEXT = requests.get(YOUTUBE_LINK).text
-SOUP = BeautifulSoup(WEBSITE_TEXT, 'lxml')
+
+url_text = requests.get(URL).text
+soup = BeautifulSoup(url_text, 'html.parser')
+
+elem = soup.find_all('div')
+print(elem)
