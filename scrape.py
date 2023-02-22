@@ -16,4 +16,5 @@ load_dotenv()
 # YOUTUBE_LINK = os.getenv('YOUTUBE_LINK')
 YOUTUBE_LINK = 'https://www.youtube.com/gaming/games'
 EMAIL = os.getenv('EMAIL')
-WEBSITE_TEXT = requests.get(YOUTUBE_LINK)
+WEBSITE_TEXT = requests.get(YOUTUBE_LINK).text
+SOUP = BeautifulSoup(WEBSITE_TEXT, 'lxml')
