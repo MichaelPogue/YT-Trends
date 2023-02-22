@@ -17,8 +17,17 @@ load_dotenv()
 URL = 'https://www.youtube.com/gaming/games'
 EMAIL = os.getenv('EMAIL')
 
-url_text = requests.get(URL).text
-soup = BeautifulSoup(url_text, 'html.parser')
+response = requests.get(URL).text
+soup = BeautifulSoup(response, 'html.parser')
 
-elem = soup.find_all('div')
-print(elem)
+
+# class ytTrends:
+#     def __init__(self, URL, EMAIL):
+#         self.URL = URL
+#         self.EMAIL = EMAIL
+
+#     def get_website_data(self):
+#         response = requests.get(URL).text
+#         soup = BeautifulSoup(response, 'html.parser')
+
+# ytt = ytTrends
