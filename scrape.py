@@ -13,6 +13,7 @@ import requests
 
 # Set API parameters. 
 load_dotenv()
-YOUTUBE_LINK = os.getenv('YOUTUBE_LINK')
+# YOUTUBE_LINK = os.getenv('YOUTUBE_LINK')
+YOUTUBE_LINK = 'https://www.youtube.com/gaming/games'
 EMAIL = os.getenv('EMAIL')
 
