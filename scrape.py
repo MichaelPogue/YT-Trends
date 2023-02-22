@@ -11,9 +11,9 @@ from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 import requests
 
-# Set API parameters. 
+# Set global variable parameters. 
 load_dotenv()
 # YOUTUBE_LINK = os.getenv('YOUTUBE_LINK')
 YOUTUBE_LINK = 'https://www.youtube.com/gaming/games'
 EMAIL = os.getenv('EMAIL')
-
+WEBSITE_TEXT = requests.get(YOUTUBE_LINK)
