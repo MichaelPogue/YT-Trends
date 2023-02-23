@@ -21,9 +21,13 @@ soup = BeautifulSoup(response, 'html.parser')
 primary_data = soup.body.find_all('script')[13].contents[0]
 
 class ytGameTrends:
-    def __init__(self, EMAIL):
-        self.EMAIL = EMAIL
+    # response = requests.get(URL).text
+    # soup = BeautifulSoup(response, 'html.parser')
+    # primary_data = soup.body.find_all('script')[13].contents[0]
+
+    def __init__(self, primary_data):
         self.primary_data = primary_data
+        self.get_data()
 
     def get_data(self):
         data_name = []
@@ -54,6 +58,7 @@ class ytGameTrends:
                     ['game']
                     ['gameDetailsRenderer']
                 )
+
                 game_data_name = details['title']['simpleText']
                 game_data_views = details['liveViewersText']['runs'][0]['text']
 
@@ -65,7 +70,28 @@ class ytGameTrends:
 
         return data_name, data_views
 
-ytg = ytGameTrends
-a, b = ytg.get_data(primary_data)
+class ytDataProcess(ytGameTrends):
+    def __init__(self, data_name, data_views, EMAIL):
+        self.EMAIL = EMAIL
+        self.data_name = data_name
+        self.data_views = data_views
 
-a
+    def test():
+        data_views = 'test'
+        return data_views
+
+ytg = ytGameTrends
+ytd = ytDataProcess
+
+def main():
+    pass
+
+name, views = ytg.get_data(primary_data)
+names = pd.DataFrame(name, columns = [
+    'name'])
+
+views = pd.DataFrame(views, columns = [
+    'views'])
+
+test = names.join(views)
+test.head(3)
