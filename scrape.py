@@ -28,6 +28,7 @@ class ytGameTrends:
     def get_data(self):
         data_name = []
         data_views = []
+
         try: 
             game_data = (
                     json.loads(primary_data[20:-1])
@@ -62,9 +63,9 @@ class ytGameTrends:
         except Exception:
             pass
 
-        return data_name
+        return data_name, data_views
 
 ytg = ytGameTrends
-a = ytg.get_data(primary_data)
+a, b = ytg.get_data(primary_data)
 
 a
