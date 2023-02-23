@@ -20,40 +20,51 @@ response = requests.get(URL).text
 soup = BeautifulSoup(response, 'html.parser')
 primary_data = soup.body.find_all('script')[13].contents[0]
 
-data_name = []
-data_views = []
-try: 
-    game_data = (
-            json.loads(primary_data[20:-1])
-            ['contents']
-            ['twoColumnBrowseResultsRenderer']
-            ['tabs'][0]
-            ['tabRenderer']
-            ['content']
-            ['sectionListRenderer']
-            ['contents'][0]
-            ['itemSectionRenderer']
-            ['contents'][0]
-            ['shelfRenderer']
-            ['content']
-            ['gridRenderer']
-            ['items']
-        )
+class ytGameTrends:
+    def __init__(self, EMAIL):
+        self.EMAIL = EMAIL
+        self.primary_data = primary_data
 
-    for game in game_data:
-        details = (
-            game
-            ['gameCardRenderer']
-            ['game']
-            ['gameDetailsRenderer']
-        )
-        game_data_name = details['title']['simpleText']
-        game_data_views = details['liveViewersText']['runs'][0]['text']
+    def get_data(self):
+        data_name = []
+        data_views = []
+        try: 
+            game_data = (
+                    json.loads(primary_data[20:-1])
+                    ['contents']
+                    ['twoColumnBrowseResultsRenderer']
+                    ['tabs'][0]
+                    ['tabRenderer']
+                    ['content']
+                    ['sectionListRenderer']
+                    ['contents'][0]
+                    ['itemSectionRenderer']
+                    ['contents'][0]
+                    ['shelfRenderer']
+                    ['content']
+                    ['gridRenderer']
+                    ['items']
+                )
 
-        data_name.append(game_data_name)
-        data_views.append(game_data_views)
+            for game in game_data:
+                details = (
+                    game
+                    ['gameCardRenderer']
+                    ['game']
+                    ['gameDetailsRenderer']
+                )
+                game_data_name = details['title']['simpleText']
+                game_data_views = details['liveViewersText']['runs'][0]['text']
 
-except Exception:
-    pass
+                data_name.append(game_data_name)
+                data_views.append(game_data_views)
 
-data_name
+        except Exception:
+            pass
+
+        return data_name
+
+ytg = ytGameTrends
+a = ytg.get_data(primary_data)
+
+a
