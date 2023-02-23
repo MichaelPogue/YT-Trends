@@ -23,7 +23,7 @@ soup = BeautifulSoup(response, 'html.parser')
 primary_data = soup.body.find_all('script')[13].contents[0]
 
 game_data = (
-        json.loads(main[20:-1])
+        json.loads(primary_data[20:-1])
         ['contents']
         ['twoColumnBrowseResultsRenderer']
         ['tabs'][0]
