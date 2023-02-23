@@ -20,9 +20,8 @@ response = requests.get(URL).text
 soup = BeautifulSoup(response, 'html.parser')
 primary_data = soup.body.find_all('script')[13].contents[0]
 
-class ytTrends:
-    def __init__(self, URL, EMAIL):
-        self.URL = URL
+class ytGameTrends:
+    def __init__(self, EMAIL, primary_data):
         self.EMAIL = EMAIL
         self.primary_data = primary_data
 
@@ -50,4 +49,6 @@ class ytTrends:
             pass
         return all_data
 
-ytt = ytTrends
+ytt = ytGameTrends
+
+print(ytt.get_website_data(primary_data))
