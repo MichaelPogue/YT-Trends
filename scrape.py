@@ -44,10 +44,23 @@ class ytGameTrends:
                     ['gridRenderer']
                     ['items']
                 )
-            all_data.append(game_data)
+
+            for game in game_data:
+                details = (
+                    game
+                    ['gameCardRenderer']
+                    ['game']
+                    ['gameDetailsRenderer']
+                )
+                game_data_name = details['title']['simpleText']
+                game_data_views = details['liveViewersText']['runs'][0]['text']
+
+                all_data.append(game_data_name)
+                # data_views.append(game_data_views)
+
         except Exception:
             pass
-        return all_data
+        return game_data_name
 
 ytt = ytGameTrends
 
