@@ -10,7 +10,6 @@ import json
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 
-
 # Set API parameters. 
 load_dotenv()
 # URL = os.getenv('YOUTUBE_LINK')
