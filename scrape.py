@@ -20,48 +20,40 @@ response = requests.get(URL).text
 soup = BeautifulSoup(response, 'html.parser')
 primary_data = soup.body.find_all('script')[13].contents[0]
 
-class ytGameTrends:
-    def __init__(self, EMAIL, primary_data):
-        self.EMAIL = EMAIL
-        self.primary_data = primary_data
+data_name = []
+data_views = []
+try: 
+    game_data = (
+            json.loads(primary_data[20:-1])
+            ['contents']
+            ['twoColumnBrowseResultsRenderer']
+            ['tabs'][0]
+            ['tabRenderer']
+            ['content']
+            ['sectionListRenderer']
+            ['contents'][0]
+            ['itemSectionRenderer']
+            ['contents'][0]
+            ['shelfRenderer']
+            ['content']
+            ['gridRenderer']
+            ['items']
+        )
 
-    def get_website_data(self):
-        all_data = []
-        try: 
-            game_data = (
-                    json.loads(primary_data[20:-1])
-                    ['contents']
-                    ['twoColumnBrowseResultsRenderer']
-                    ['tabs'][0]
-                    ['tabRenderer']
-                    ['content']
-                    ['sectionListRenderer']
-                    ['contents'][0]
-                    ['itemSectionRenderer']
-                    ['contents'][0]
-                    ['shelfRenderer']
-                    ['content']
-                    ['gridRenderer']
-                    ['items']
-                )
+    for game in game_data:
+        details = (
+            game
+            ['gameCardRenderer']
+            ['game']
+            ['gameDetailsRenderer']
+        )
+        game_data_name = details['title']['simpleText']
+        game_data_views = details['liveViewersText']['runs'][0]['text']
 
-            for game in game_data:
-                details = (
-                    game
-                    ['gameCardRenderer']
-                    ['game']
-                    ['gameDetailsRenderer']
-                )
-                game_data_name = details['title']['simpleText']
-                game_data_views = details['liveViewersText']['runs'][0]['text']
+        data_name.append(game_data_name)
+        data_views.append(game_data_views)
 
-                all_data.append(game_data_name)
-                # data_views.append(game_data_views)
+except Exception:
+    pass
 
-        except Exception:
-            pass
-        return game_data_name
-
-ytt = ytGameTrends
-
-print(ytt.get_website_data(primary_data))
+data_name
