@@ -5,11 +5,11 @@
 
 import os, csv, schedule, datetime, time
 import pandas as pd
-from googleapiclient.discovery import build
-
+import requests
+import json
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
-import requests
+
 
 # Set API parameters. 
 load_dotenv()
@@ -21,6 +21,23 @@ response = requests.get(URL).text
 soup = BeautifulSoup(response, 'html.parser')
 
 primary_data = soup.body.find_all('script')[13].contents[0]
+
+game_data = (
+        json.loads(main[20:-1])
+        ['contents']
+        ['twoColumnBrowseResultsRenderer']
+        ['tabs'][0]
+        ['tabRenderer']
+        ['content']
+        ['sectionListRenderer']
+        ['contents'][0]
+        ['itemSectionRenderer']
+        ['contents'][0]
+        ['shelfRenderer']
+        ['content']
+        ['gridRenderer']
+        ['items']
+    )
 
 # class ytTrends:
 #     def __init__(self, URL, EMAIL):
