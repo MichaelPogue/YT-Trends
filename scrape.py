@@ -18,37 +18,36 @@ EMAIL = os.getenv('EMAIL')
 
 response = requests.get(URL).text
 soup = BeautifulSoup(response, 'html.parser')
-
 primary_data = soup.body.find_all('script')[13].contents[0]
 
-try: 
-    game_data = (
-            json.loads(primary_data[20:-1])
-            ['contents']
-            ['twoColumnBrowseResultsRenderer']
-            ['tabs'][0]
-            ['tabRenderer']
-            ['content']
-            ['sectionListRenderer']
-            ['contents'][0]
-            ['itemSectionRenderer']
-            ['contents'][0]
-            ['shelfRenderer']
-            ['content']
-            ['gridRenderer']
-            ['items']
-        )
+class ytTrends:
+    def __init__(self, URL, EMAIL):
+        self.URL = URL
+        self.EMAIL = EMAIL
+        self.primary_data = primary_data
 
-except Exception:
-    pass
+    def get_website_data(self):
+        all_data = []
+        try: 
+            game_data = (
+                    json.loads(primary_data[20:-1])
+                    ['contents']
+                    ['twoColumnBrowseResultsRenderer']
+                    ['tabs'][0]
+                    ['tabRenderer']
+                    ['content']
+                    ['sectionListRenderer']
+                    ['contents'][0]
+                    ['itemSectionRenderer']
+                    ['contents'][0]
+                    ['shelfRenderer']
+                    ['content']
+                    ['gridRenderer']
+                    ['items']
+                )
+            all_data.append(game_data)
+        except Exception:
+            pass
+        return all_data
 
-# class ytTrends:
-#     def __init__(self, URL, EMAIL):
-#         self.URL = URL
-#         self.EMAIL = EMAIL
-
-#     def get_website_data(self):
-#         response = requests.get(URL).text
-#         soup = BeautifulSoup(response, 'html.parser')
-
-# ytt = ytTrends
+ytt = ytTrends
