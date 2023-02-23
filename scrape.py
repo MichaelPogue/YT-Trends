@@ -20,6 +20,7 @@ EMAIL = os.getenv('EMAIL')
 response = requests.get(URL).text
 soup = BeautifulSoup(response, 'html.parser')
 
+primary_data = soup.body.find_all('script')[13].contents[0]
 
 # class ytTrends:
 #     def __init__(self, URL, EMAIL):
