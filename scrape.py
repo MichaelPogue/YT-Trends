@@ -22,22 +22,26 @@ soup = BeautifulSoup(response, 'html.parser')
 
 primary_data = soup.body.find_all('script')[13].contents[0]
 
-game_data = (
-        json.loads(primary_data[20:-1])
-        ['contents']
-        ['twoColumnBrowseResultsRenderer']
-        ['tabs'][0]
-        ['tabRenderer']
-        ['content']
-        ['sectionListRenderer']
-        ['contents'][0]
-        ['itemSectionRenderer']
-        ['contents'][0]
-        ['shelfRenderer']
-        ['content']
-        ['gridRenderer']
-        ['items']
-    )
+try: 
+    game_data = (
+            json.loads(primary_data[20:-1])
+            ['contents']
+            ['twoColumnBrowseResultsRenderer']
+            ['tabs'][0]
+            ['tabRenderer']
+            ['content']
+            ['sectionListRenderer']
+            ['contents'][0]
+            ['itemSectionRenderer']
+            ['contents'][0]
+            ['shelfRenderer']
+            ['content']
+            ['gridRenderer']
+            ['items']
+        )
+
+except Exception:
+    pass
 
 # class ytTrends:
 #     def __init__(self, URL, EMAIL):
