@@ -1,9 +1,9 @@
 """ 
-
+Step 1: Data Generation
 -------------------------------------------------------------------------------
 """
 
-import os, csv, schedule, datetime, time
+import os
 import pandas as pd
 import requests
 import json
@@ -20,78 +20,53 @@ response = requests.get(URL).text
 soup = BeautifulSoup(response, 'html.parser')
 primary_data = soup.body.find_all('script')[13].contents[0]
 
-class ytGameTrends:
-    # response = requests.get(URL).text
-    # soup = BeautifulSoup(response, 'html.parser')
-    # primary_data = soup.body.find_all('script')[13].contents[0]
+data_name = []
+data_views = []
 
-    def __init__(self, primary_data):
-        self.primary_data = primary_data
-        self.get_data()
+try: 
+    game_data = (
+            json.loads(primary_data[20:-1])
+            ['contents']
+            ['twoColumnBrowseResultsRenderer']
+            ['tabs'][0]
+            ['tabRenderer']
+            ['content']
+            ['sectionListRenderer']
+            ['contents'][0]
+            ['itemSectionRenderer']
+            ['contents'][0]
+            ['shelfRenderer']
+            ['content']
+            ['gridRenderer']
+            ['items']
+        )
 
-    def get_data(self):
-        data_name = []
-        data_views = []
+    for game in game_data:
+        details = (
+            game
+            ['gameCardRenderer']
+            ['game']
+            ['gameDetailsRenderer']
+        )
 
-        try: 
-            game_data = (
-                    json.loads(primary_data[20:-1])
-                    ['contents']
-                    ['twoColumnBrowseResultsRenderer']
-                    ['tabs'][0]
-                    ['tabRenderer']
-                    ['content']
-                    ['sectionListRenderer']
-                    ['contents'][0]
-                    ['itemSectionRenderer']
-                    ['contents'][0]
-                    ['shelfRenderer']
-                    ['content']
-                    ['gridRenderer']
-                    ['items']
-                )
+        game_data_name = details['title']['simpleText']
+        game_data_views = details['liveViewersText']['runs'][0]['text']
 
-            for game in game_data:
-                details = (
-                    game
-                    ['gameCardRenderer']
-                    ['game']
-                    ['gameDetailsRenderer']
-                )
-
-                game_data_name = details['title']['simpleText']
-                game_data_views = details['liveViewersText']['runs'][0]['text']
-
-                data_name.append(game_data_name)
-                data_views.append(game_data_views)
-
-        except Exception:
-            pass
-
-        return data_name, data_views
-
-class ytDataProcess(ytGameTrends):
-    def __init__(self, data_name, data_views, EMAIL):
-        self.EMAIL = EMAIL
-        self.data_name = data_name
-        self.data_views = data_views
-
-    def test():
-        data_views = 'test'
-        return data_views
-
-ytg = ytGameTrends
-ytd = ytDataProcess
-
-def main():
+        data_name.append(game_data_name)
+        data_views.append(game_data_views)
+except Exception:
     pass
 
-name, views = ytg.get_data(primary_data)
-names = pd.DataFrame(name, columns = [
+name = pd.DataFrame(data_name, columns = [
     'name'])
-
-views = pd.DataFrame(views, columns = [
+views = pd.DataFrame(data_views, columns = [
     'views'])
 
-test = names.join(views)
-test.head(3)
+all_data = name.join(views)
+
+all_data.to_csv('test1.csv')
+
+""" 
+Step 2: Data Sending
+-------------------------------------------------------------------------------
+"""
