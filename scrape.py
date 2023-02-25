@@ -64,9 +64,9 @@ views = pd.DataFrame(data_views, columns = [
 
 all_data = name.join(views)
 
-all_data.to_csv('test1.csv')
+all_data.to_csv('streamstatistics.csv')
 
 """ 
-Step 2: Data Sending
+Step 2: Data Producer
 -------------------------------------------------------------------------------
 """
