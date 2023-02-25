@@ -80,7 +80,7 @@ views = pd.DataFrame(data_views, columns = [
 
 all_data = name.join(views)
 
-all_data.to_csv('streamstatistics.csv')
+all_data.to_csv(f'{FILE_NAME}.csv')
 
 all_data.head(2)
 
@@ -108,10 +108,10 @@ def read_csv():
     next(reader)
 
     for row in reader:
-        smoker_time_id = row[0]
+        game_name = row[1]
+        game_views = row[2]
         try:
-            c1_row_text = float(row[1])
-            row_text = f"[{smoker_time_id}, {c1_row_text}]"
+            row_text = f"[{game_name}, {game_views}]"
             message = row_text.encode()
             send_message(host, queue, message)
         except ValueError:
