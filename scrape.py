@@ -1,30 +1,34 @@
-""" 
-Step 1: Data Generation
--------------------------------------------------------------------------------
-"""
-
+""" Modules
+----------------------------------------------------------------------------"""
 import os
 import pandas as pd
 import requests
 import json
 import pika
 import sys
+import webbrowser
 import time
+import csv
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 from collections import deque
 from time import strftime 
+from dotenv import load_dotenv
+from bs4 import BeautifulSoup
 
+""" 
+----------------------------------------------------------------------------"""
+# Set API parameters. 
 load_dotenv()
 # URL = os.getenv('YOUTUBE_LINK')
 URL = 'https://www.youtube.com/gaming/games'
 EMAIL = os.getenv('EMAIL')
 FILE_NAME = 'streamstatistics'
 
-rmq_host = 'localhost'
-rmq_queue = 'yt_streamstatistics'
-rmq_deque = deque(maxlen = 5)
-rmq_limit = 0 #######################
+host = 'localhost'
+queue = 'yt_streamstatistics'
+ytdeque = deque(maxlen = 5)
+limit = 0 #######################
 
 response = requests.get(URL).text
 soup = BeautifulSoup(response, 'html.parser')
@@ -33,6 +37,8 @@ primary_data = soup.body.find_all('script')[13].contents[0]
 data_name = []
 data_views = []
 
+""" 
+----------------------------------------------------------------------------"""
 try: 
     game_data = (
             json.loads(primary_data[20:-1])
@@ -76,11 +82,10 @@ all_data = name.join(views)
 
 all_data.to_csv('streamstatistics.csv')
 
-""" 
-Step 2: Data Producer
--------------------------------------------------------------------------------
-"""
+all_data.head(2)
 
+""" Step 2: Data Producer
+----------------------------------------------------------------------------"""
 def rabbitmq_admin_site_offer():
     """Offer to open the RabbitMQ Admin website"""
     answer = input("Would you like to monitor RabbitMQ queues? y or n ")
@@ -88,15 +93,15 @@ def rabbitmq_admin_site_offer():
         webbrowser.open_new("http://localhost:15672/#/queues")
         print()
 
-""" Clear Queue
------------------------------------------------------------------------------"""
+""" 
+----------------------------------------------------------------------------"""
 def queue_delete(host: str, queue: str):
     conn = pika.BlockingConnection(pika.ConnectionParameters(host))
     ch = conn.channel()
     ch.queue_delete(queue)
 
-""" Message Processing
------------------------------------------------------------------------------"""
+""" 
+----------------------------------------------------------------------------"""
 def read_csv():
     csv_file = open(f'{FILE_NAME}.csv', "r")
     reader = csv.reader(csv_file, delimiter=",")
@@ -108,12 +113,12 @@ def read_csv():
             c1_row_text = float(row[1])
             row_text = f"[{smoker_time_id}, {c1_row_text}]"
             message = row_text.encode()
-            send_message(rmq_host, rmq_queue, message)
+            send_message(host, queue, message)
         except ValueError:
             pass
 
-""" Send Message to RabbitMQ Servers
------------------------------------------------------------------------------"""
+""" 
+----------------------------------------------------------------------------"""
 def send_message(host: str, queue_name: str, message):
     try:
         conn = pika.BlockingConnection(pika.ConnectionParameters(host))
@@ -128,15 +133,14 @@ def send_message(host: str, queue_name: str, message):
     finally:
         conn.close()
 
-""" Code Command Center
------------------------------------------------------------------------------"""
+""" 
+----------------------------------------------------------------------------"""
 def main():
-    queue_delete(rmq_host, rmq_queue)
+    queue_delete(host, queue)
     # rabbitmq_admin_site_offer()
     read_csv()
 
-"""  
-Launch Code!
------------------------------------------------------------------------------------------- """
+""" 
+----------------------------------------------------------------------------"""
 if __name__ == "__main__":
     main()
