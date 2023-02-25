@@ -15,17 +15,15 @@ from bs4 import BeautifulSoup
 from collections import deque
 from time import strftime 
 
-# Set API parameters. 
 load_dotenv()
 # URL = os.getenv('YOUTUBE_LINK')
 URL = 'https://www.youtube.com/gaming/games'
 EMAIL = os.getenv('EMAIL')
 
-host = 'localhost'
-rmq_queue = "01-smoker"
+rmq_host = 'localhost'
+rmq_queue = 'yt_streamstatistics'
 rmq_deque = deque(maxlen = 5)
 rmq_limit = 0 #######################
-
 
 response = requests.get(URL).text
 soup = BeautifulSoup(response, 'html.parser')
