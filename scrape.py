@@ -82,8 +82,6 @@ all_data = name.join(views)
 
 all_data.to_csv(f'{FILE_NAME}.csv')
 
-all_data.head(2)
-
 """ Step 2: Data Producer
 ----------------------------------------------------------------------------"""
 def rabbitmq_admin_site_offer():
@@ -103,7 +101,7 @@ def queue_delete(host: str, queue: str):
 """ 
 ----------------------------------------------------------------------------"""
 def read_csv():
-    csv_file = open(f'{FILE_NAME}.csv', "r")
+    csv_file = open(f'{FILE_NAME}.csv', 'r', encoding = 'utf-8')
     reader = csv.reader(csv_file, delimiter=",")
     next(reader)
 
@@ -119,14 +117,14 @@ def read_csv():
 
 """ 
 ----------------------------------------------------------------------------"""
-def send_message(host: str, queue_name: str, message):
+def send_message(host: str, queue: str, message):
     try:
         conn = pika.BlockingConnection(pika.ConnectionParameters(host))
         ch = conn.channel()
-        ch.queue_declare(queue=queue_name, durable=True)
-        ch.basic_publish(exchange="", routing_key=queue_name, body=message)
-        print(f" [x] Sent {message} from {queue_name}")
-        time.sleep(.1)
+        ch.queue_declare(queue = queue, durable = True)
+        ch.basic_publish(exchange = '', routing_key = queue, body = message)
+        print(f"Message Sent: {message}")
+        time.sleep(1)
     except pika.exceptions.AMQPConnectionError as e:
         print(f"ERROR! Connection to RabbitMQ server failed: {e}")
         sys.exit(1)
