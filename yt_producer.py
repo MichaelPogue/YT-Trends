@@ -24,13 +24,10 @@ FILE_NAME = 'streamstatistics'
 
 host = 'localhost'
 queue = 'yt_streamstatistics'
-ytdeque = deque(maxlen = 5)
-limit = 0 #######################
 
 response = requests.get(URL).text
 soup = BeautifulSoup(response, 'html.parser')
 primary_data = soup.body.find_all('script')[13].contents[0]
-
 
 class ytData:
     """ 
