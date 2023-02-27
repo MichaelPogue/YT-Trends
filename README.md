@@ -5,7 +5,7 @@
 Proof of Work
 
 Results:!
-[Result](https://user-images.githubusercontent.com/115908053/221660314-e2b88e2c-bffa-4df0-bfaa-50f8f90f2980.jpg)
+![image](https://user-images.githubusercontent.com/115908053/221660845-5c4687e5-fe7a-4bce-8a63-9a3a3b13a67d.png)
 
 
 
