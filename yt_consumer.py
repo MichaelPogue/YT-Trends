@@ -29,23 +29,36 @@ class ytReceive:
         data = initial_split[1][:-1]
         name = initial_split[0]
 
+
         if ytReceive.character_detection(data, '.') == True:
             remove_period = data.replace('.', '')
             remove_letter = remove_period.replace('K','')
             data_final = int(remove_letter)*100
-            # print(f'--------------> {data_final}')
+
+            if data_final >= data_warning:
+                # ytReceive.send_message(name, data_final)
+                print( '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^' )
+            elif data_final < data_warning:
+                pass
+
         elif ytReceive.character_detection(data, '.') == False:
             remove_letter = data.replace('K','')
             data_final = int(remove_letter)*1000
             # print(f'--------------> {data_final}')
 
-        if data_final >= data_warning:
-            ytReceive.send_message(name, data_final)
-        elif data_final < data_warning:
+            if data_final >= data_warning:
+                # ytReceive.send_message(name, data_final)
+                print( '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^' )
+            elif data_final < data_warning:
+                pass
+
+        elif ytReceive.character_detection(data, 'k') == False:
             pass
 
+
+
         ch.basic_ack(delivery_tag = method.delivery_tag)
-        time.sleep(1)
+        # time.sleep(1)
 
     def send_message(name, data_final):
         subject = f"Project YT-TREND Alert: {name} at {data_final}"
