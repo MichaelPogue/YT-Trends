@@ -10,7 +10,8 @@ Purpose:
 The purpose for this segment is to use BeautifulSoup to read and parse the
 data from YouTube's list of currently streamed video games. It reads the
 JSON data from YouTube and converts that data into names and view counts.
-Finally, the data is written to a CSV file and streamed to RabbitMQ's servers.
+Finally, the data is written to a CSV file and streamed to RabbitMQ's 
+servers; which will later be read by yt_consumer.py.
 ----------------------------------------------------------------------------"""
 
 # Load necessary modules for code.
