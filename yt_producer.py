@@ -1,5 +1,19 @@
-""" Modules
+""" 
+Developed By: Michael Pogue
+Created:      2023.02.22
+Last Updated: 2023.02.27
+
+Note:
+This code represents a two-part system, yt_producer.py and yt_consumer.py. 
+
+Purpose:
+The purpose for this segment is to use BeautifulSoup to read and parse the
+data from YouTube's list of currently streamed video games. It reads the
+JSON data from YouTube and converts that data into names and view counts.
+Finally, the data is written to a CSV file and streamed to RabbitMQ's servers.
 ----------------------------------------------------------------------------"""
+
+# Load necessary modules for code.
 import os
 import pandas as pd
 import requests
@@ -16,31 +30,33 @@ from time import strftime
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 
+# Set up environment. 
 load_dotenv()
-# URL = os.getenv('YOUTUBE_LINK')
-URL = 'https://www.youtube.com/gaming/games'
-EMAIL = os.getenv('EMAIL')
-FILE_NAME = 'streamstatistics'
+URL = os.getenv('YOUTUBE_LINK')
+# URL = 'https://www.youtube.com/gaming/games'
 
+# Set default variables.
+FILE_NAME = 'streamstatistics'
 host = 'localhost'
 queue = 'yt_streamstatistics'
 
+# Use BeautifulSoup module to parse requested URL.
 response = requests.get(URL).text
 soup = BeautifulSoup(response, 'html.parser')
 primary_data = soup.body.find_all('script')[13].contents[0]
 
 class ytData:
-    """ 
-    ----------------------------------------------------------------------------"""
+    """ Class that contains primary data scrape methods.
+    ------------------------------------------------------------------------"""
     def __init__(self, primary_data) -> None:
         self.primary_data = primary_data
 
     def collect_data(self):
+        """ Method to scrape data from Youtube URL.
+        --------------------------------------------------------------------"""        
         data_name = []
         data_views = []
 
-        """ 
-        ----------------------------------------------------------------------------"""
         try: 
             game_data = (
                     json.loads(primary_data[20:-1])
@@ -84,25 +100,27 @@ class ytData:
         all_data.to_csv(f'{FILE_NAME}.csv')
 
 class ytSend:
-    """ Step 2: Data Producer
-    ----------------------------------------------------------------------------"""
+    """ Class to clear queues, read CSV file, & send the message to RabbitMQ.
+    ------------------------------------------------------------------------"""
     def rabbitmq_admin_site_offer():
-        """Offer to open the RabbitMQ Admin website"""
+        """ Method asking to off to monitor RabbitMQ primary servers.
+        --------------------------------------------------------------------"""       
         answer = input("Would you like to monitor RabbitMQ queues? y or n ")
         if answer.lower() == "y":
-            webbrowser.open_new("http://localhost:15672/#/queues")
-            print()
+            print("Username: guest.")
+            print("Password: guest.")
+            webbrowser.open_new("http://localhost:15672/#/queues\n")
 
-    """ 
-    ----------------------------------------------------------------------------"""
     def queue_delete(host: str, queue: str):
+        """ Method to clear any queues already pending.
+        --------------------------------------------------------------------""" 
         conn = pika.BlockingConnection(pika.ConnectionParameters(host))
         ch = conn.channel()
         ch.queue_delete(queue)
 
-    """ 
-    ----------------------------------------------------------------------------"""
     def read_csv():
+        """ Method to read CSV file already generated.
+        --------------------------------------------------------------------""" 
         csv_file = open(f'{FILE_NAME}.csv', 'r', encoding = 'utf-8')
         reader = csv.reader(csv_file, delimiter=",")
         next(reader)
@@ -117,25 +135,28 @@ class ytSend:
             except ValueError:
                 pass
 
-    """ 
-    ----------------------------------------------------------------------------"""
     def send_message(host: str, queue: str, message):
+        """ Method to send data obtained through read_csv to RabbitMQ.
+        --------------------------------------------------------------------""" 
         try:
             conn = pika.BlockingConnection(pika.ConnectionParameters(host))
             ch = conn.channel()
             ch.queue_declare(queue = queue, durable = True)
             ch.basic_publish(exchange = '', routing_key = queue, body = message)
             print(f"Message Sent: {message}")
-            # time.sleep(1)
+            time.sleep(1)
         except pika.exceptions.AMQPConnectionError as e:
-            print(f"ERROR! Connection to RabbitMQ server failed: {e}")
+            print(f"ERROR! Connection to RabbitMQ server has failed. Error: \n{e}")
             sys.exit(1)
+        except KeyboardInterrupt:
+            print("\nUser interrupted continuous listening process.\n")
+            sys.exit(0)
         finally:
             conn.close()
 
-""" 
-----------------------------------------------------------------------------"""
 def main():
+    """ Main function to setup and launch individual components of code.
+    ------------------------------------------------------------------------"""
     ytd = ytData
     yts = ytSend
     ytd.collect_data(primary_data)
@@ -143,7 +164,7 @@ def main():
     # rabbitmq_admin_site_offer()
     yts.read_csv()
 
-""" 
-----------------------------------------------------------------------------"""
 if __name__ == "__main__":
+    """ Primary function to launch code.
+    ------------------------------------------------------------------------"""
     main()
