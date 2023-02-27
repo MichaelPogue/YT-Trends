@@ -57,6 +57,7 @@ class ytData:
         data_name = []
         data_views = []
 
+        # Sort JSON data into an array only for names and views.
         try: 
             game_data = (
                     json.loads(primary_data[20:-1])
@@ -74,7 +75,6 @@ class ytData:
                     ['gridRenderer']
                     ['items']
                 )
-
             for game in game_data:
                 details = (
                     game
@@ -91,11 +91,11 @@ class ytData:
         except Exception:
             pass
 
+        # Insert data into a single DataFrame.
         name = pd.DataFrame(data_name, columns = [
             'name'])
         views = pd.DataFrame(data_views, columns = [
             'views'])
-
         all_data = name.join(views)
         all_data.to_csv(f'{FILE_NAME}.csv')
 
@@ -124,7 +124,7 @@ class ytSend:
         csv_file = open(f'{FILE_NAME}.csv', 'r', encoding = 'utf-8')
         reader = csv.reader(csv_file, delimiter=",")
         next(reader)
-
+        # Read CSV data row by row, then send to RabbitMQ.
         for row in reader:
             game_name = row[1]
             game_views = row[2]
@@ -161,7 +161,7 @@ def main():
     yts = ytSend
     ytd.collect_data(primary_data)
     yts.queue_delete(host, queue)
-    # rabbitmq_admin_site_offer()
+    yts.rabbitmq_admin_site_offer()
     yts.read_csv()
 
 if __name__ == "__main__":
