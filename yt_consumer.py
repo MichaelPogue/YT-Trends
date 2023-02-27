@@ -36,7 +36,7 @@ EMAIL_RECEIVER = os.getenv('EMAIL_RECEIVER')
 host = 'localhost'
 queue = 'yt_streamstatistics'
 data_deque = deque(maxlen = 5)
-data_warning = 15000
+data_warning = 60000
 
 class ytReceive:
     """ Class to receive streamed data and alert user.
