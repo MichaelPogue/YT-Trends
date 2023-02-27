@@ -30,35 +30,42 @@ class ytReceive:
         name = initial_split[0]
 
 
+# -----------------------------------------------------------------------------------
+# SEGMENT 1
         if ytReceive.character_detection(data, '.') == True:
             remove_period = data.replace('.', '')
             remove_letter = remove_period.replace('K','')
             data_final = int(remove_letter)*100
+            # print(f'SEGMENT 1 PERIOD -> CAP: {data_warning} Value: {data_final}')
 
+        # SEGMENT 2
             if data_final >= data_warning:
-                # ytReceive.send_message(name, data_final)
-                print( '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^' )
+                ytReceive.send_message(name, data_final)
+                # print(f'SEGMENT 2 PERIOD PASS -> CAP: {data_warning} Value: {data_final}')
             elif data_final < data_warning:
+                print('SEGMENT 2 PERIOD FAIL')
                 pass
 
-        elif ytReceive.character_detection(data, '.') == False:
+        # SEGMENT 3
+        elif ytReceive.character_detection(data, '.') == False and ytReceive.character_detection(data, 'K') == True:
             remove_letter = data.replace('K','')
             data_final = int(remove_letter)*1000
-            # print(f'--------------> {data_final}')
-
+            # print(f'SEGMENT 3 NO PERIOD -> CAP: {data_warning} Value: {data_final}')
+        # SEGMENT 4
             if data_final >= data_warning:
-                # ytReceive.send_message(name, data_final)
-                print( '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^' )
+                ytReceive.send_message(name, data_final)
+                # print(f'SEGMENT 4 NO PERIOD PASS -> CAP: {data_warning} Value: {data_final}')
             elif data_final < data_warning:
+                # print('SEGMENT 4 NO PERIOD FAIL')
                 pass
 
         elif ytReceive.character_detection(data, 'k') == False:
+            # print("GOOD")
             pass
-
-
+# -----------------------------------------------------------------------------------
 
         ch.basic_ack(delivery_tag = method.delivery_tag)
-        # time.sleep(1)
+        time.sleep(1)
 
     def send_message(name, data_final):
         subject = f"Project YT-TREND Alert: {name} at {data_final}"
