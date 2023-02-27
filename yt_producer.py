@@ -34,7 +34,7 @@ class ytData:
     ----------------------------------------------------------------------------"""
     def __init__(self, primary_data) -> None:
         self.primary_data = primary_data
-    
+
     def collect_data(self):
         data_name = []
         data_views = []
@@ -83,8 +83,6 @@ class ytData:
         all_data = name.join(views)
         all_data.to_csv(f'{FILE_NAME}.csv')
 
-        # return all_data
-
 class ytSend:
     """ Step 2: Data Producer
     ----------------------------------------------------------------------------"""
@@ -128,7 +126,7 @@ class ytSend:
             ch.queue_declare(queue = queue, durable = True)
             ch.basic_publish(exchange = '', routing_key = queue, body = message)
             print(f"Message Sent: {message}")
-            time.sleep(1)
+            # time.sleep(1)
         except pika.exceptions.AMQPConnectionError as e:
             print(f"ERROR! Connection to RabbitMQ server failed: {e}")
             sys.exit(1)
@@ -138,8 +136,8 @@ class ytSend:
 """ 
 ----------------------------------------------------------------------------"""
 def main():
-    yts = ytSend
     ytd = ytData
+    yts = ytSend
     ytd.collect_data(primary_data)
     yts.queue_delete(host, queue)
     # rabbitmq_admin_site_offer()
