@@ -4,8 +4,11 @@
 
 Proof of Work
 
-Results:
-![image](https://user-images.githubusercontent.com/115908053/221469197-1f668d0e-f2fa-4548-8e95-e9c9cb307d84.png)
+Results:!
+[Result](https://user-images.githubusercontent.com/115908053/221660314-e2b88e2c-bffa-4df0-bfaa-50f8f90f2980.jpg)
+
+
 
 Comparison: 
-![image](https://user-images.githubusercontent.com/115908053/221470089-4a30f0a0-ecb0-45a8-9ef5-799514bc4d83.png)
+![image](https://user-images.githubusercontent.com/115908053/221660465-27ee8762-f6fa-47da-8336-c50053e2384e.png)
+
