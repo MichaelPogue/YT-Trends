@@ -43,7 +43,7 @@ class ytReceive:
                 ytReceive.send_message(name, data_final)
                 # print(f'SEGMENT 2 PERIOD PASS -> CAP: {data_warning} Value: {data_final}')
             elif data_final < data_warning:
-                print('SEGMENT 2 PERIOD FAIL')
+                # print('SEGMENT 2 PERIOD FAIL')
                 pass
 
         # SEGMENT 3
