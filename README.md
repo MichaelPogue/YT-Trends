@@ -2,14 +2,24 @@
 Developed By: Michael Pogue
 Created:      2023.02.22
 
-# Project Overview:
-## Purpose:
+## Project Overview:
+### Purpose:
 The purpose for this code is to generate data scraped from YouTube's auto-generated video game streams and stream it to Rabbit MQ. Once received, the values will be evaluated and finally a warning via email will be dispatched should the said values reach a specific number.
 
 The idea behind this is to monitor a website and create alerts in the event that a user-specified limit has been reached. 
 
-### test
-sdaf
+## Project Requirements
+### Necessary Modules:
+1. pika
+1. sys
+1. time
+1. os
+1. ssl
+1. smtplib
+1. collections
+1. time
+1. dotenv 
+1. email.message
 
 ## Proof of Work
 
