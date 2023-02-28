@@ -27,9 +27,9 @@ This is the structure of the environment:
 ![image](https://user-images.githubusercontent.com/115908053/221733609-b4b0f2ff-3a5f-4ee3-ae6a-ea8b9a48253d.png)
 
 
-## Proof of Work
+## Results
 
-Results:
+Details of each functioning system:
 ![image](https://user-images.githubusercontent.com/115908053/221660845-5c4687e5-fe7a-4bce-8a63-9a3a3b13a67d.png)
 
 
