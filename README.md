@@ -21,6 +21,12 @@ The idea behind this is to monitor a website and create alerts in the event that
 1. dotenv 
 1. email.message
 
+### Environmental Factors:
+A .env or other environmental systems will be required in order to hide the sender's email password if this code is to be uploaded to GitHub.
+This is the structure of the environment: 
+![image](https://user-images.githubusercontent.com/115908053/221733609-b4b0f2ff-3a5f-4ee3-ae6a-ea8b9a48253d.png)
+
+
 ## Proof of Work
 
 Results:!
